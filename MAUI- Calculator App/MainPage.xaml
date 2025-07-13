@@ -1,0 +1,367 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MAUI__Calculator_App.MainPage"
+             BackgroundColor="#F8F9FA">
+
+    <Grid Padding="20" RowSpacing="15">
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- History Area -->
+        <Frame Grid.ColumnSpan="4" Grid.Row="0" 
+               BackgroundColor="White" 
+               CornerRadius="20" 
+               Padding="16"
+               Margin="0,10,0,0">
+            
+            <CollectionView x:Name="historyCollectionView"
+                           ItemsSource="{Binding HistoryItems}"
+                           SelectionMode="Single"
+                           SelectionChanged="OnHistoryItemSelected"
+                           BackgroundColor="Transparent">
+                
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="8,6">
+                            <Frame BackgroundColor="#F5F6FA" 
+                                   CornerRadius="12" 
+                                   Padding="12,8"
+                                   HasShadow="False"
+                                   BorderColor="Transparent">
+                                <StackLayout Spacing="2">
+                                    <Label Text="{Binding Expression}" 
+                                           FontSize="14" 
+                                           TextColor="#6B7280"
+                                           HorizontalTextAlignment="End" />
+                                    <Label Text="{Binding Result}" 
+                                           FontSize="16" 
+                                           FontAttributes="Bold"
+                                           TextColor="#1F2937"
+                                           HorizontalTextAlignment="End" />
+                                </StackLayout>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                
+                <CollectionView.EmptyView>
+                    <Label Text="No history yet" 
+                           FontSize="14" 
+                           TextColor="#9CA3AF"
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center" />
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </Frame>
+
+        <!-- Display Area -->
+        <Frame Grid.ColumnSpan="4" Grid.Row="1" 
+               BackgroundColor="White" 
+               CornerRadius="20" 
+               Padding="24,20">
+            
+            <StackLayout VerticalOptions="End" Spacing="8">
+                <Label x:Name="historyView"
+                       FontSize="18"
+                       FontAttributes="None"
+                       HorizontalTextAlignment="End"
+                       TextColor="#9CA3AF"
+                       LineBreakMode="TailTruncation"
+                       Text="" />
+
+                <Label x:Name="resultView"
+                       FontSize="48"
+                       FontAttributes="Bold"
+                       HorizontalTextAlignment="End"
+                       LineBreakMode="TailTruncation"
+                       Text="0"
+                       TextColor="#1F2937">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnResultTapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+                
+                <Label Text="Tap to copy"
+                       FontSize="12"
+                       FontAttributes="Italic"
+                       HorizontalTextAlignment="End"
+                       TextColor="#9CA3AF"
+                       Opacity="0.6" />
+            </StackLayout>
+        </Frame>
+
+        <!-- Row 1: Function buttons -->
+        <Button Grid.Row="2" Grid.Column="0"
+                BackgroundColor="#A3E4DB"
+                FontSize="22"
+                FontAttributes="Bold"
+                Text="AC"
+                TextColor="#059669"
+                CornerRadius="35"
+                Clicked="Clear"
+                HeightRequest="70"
+                WidthRequest="70"
+                BorderWidth="0" />
+
+        <Button Grid.Row="2" Grid.Column="1"
+                BackgroundColor="#E0E7FF"
+                FontSize="20"
+                FontAttributes="Bold"
+                Text="( )"
+                TextColor="#5B21B6"
+                CornerRadius="35"
+                Clicked="OperatorSelect"
+                HeightRequest="70"
+                WidthRequest="70"
+                BorderWidth="0" />
+
+        <Button Grid.Row="2" Grid.Column="2"
+                BackgroundColor="#E0E7FF"
+                FontSize="20"
+                FontAttributes="Bold"
+                Text="%"
+                TextColor="#5B21B6"
+                CornerRadius="35"
+                Clicked="OperatorSelect"
+                HeightRequest="70"
+                WidthRequest="70"
+                BorderWidth="0" />
+
+        <Button Grid.Row="2" Grid.Column="3"
+                BackgroundColor="#DBEAFE"
+                FontSize="24"
+                FontAttributes="Bold"
+                Text="÷"
+                TextColor="#1E40AF"
+                CornerRadius="35"
+                Clicked="OperatorSelect"
+                HeightRequest="70"
+                WidthRequest="70"
+                BorderWidth="0" />
+
+        <!-- Row 2: Numbers 7-9 and multiply -->
+        <Button Grid.Row="3" Grid.Column="0"
+                BackgroundColor="White"
+                FontSize="28"
+                FontAttributes="Bold"
+                Text="7"
+                TextColor="#1F2937"
+                CornerRadius="35"
+                Clicked="NumberSelect"
+                HeightRequest="70"
+                WidthRequest="70"
+                BorderColor="#F3F4F6"
+                BorderWidth="1" />
+
+        <Button Grid.Row="3" Grid.Column="1"
+                BackgroundColor="White"
+                FontSize="28"
+                FontAttributes="Bold"
+                Text="8"
+                TextColor="#1F2937"
+                CornerRadius="35"
+                Clicked="NumberSelect"
+                HeightRequest="70"
+                WidthRequest="70"
+                BorderColor="#F3F4F6"
+                BorderWidth="1" />
+
+        <Button Grid.Row="3" Grid.Column="2"
+                BackgroundColor="White"
+                FontSize="28"
+                FontAttributes="Bold"
+                Text="9"
+                TextColor="#1F2937"
+                CornerRadius="35"
+                Clicked="NumberSelect"
+                HeightRequest="70"
+                WidthRequest="70"
+                BorderColor="#F3F4F6"
+                BorderWidth="1" />
+
+        <Button Grid.Row="3" Grid.Column="3"
+                BackgroundColor="#DBEAFE"
+                FontSize="24"
+                FontAttributes="Bold"
+                Text="×"
+                TextColor="#1E40AF"
+                CornerRadius="35"
+                Clicked="OperatorSelect"
+                HeightRequest="70"
+                WidthRequest="70"
+                BorderWidth="0" />
+
+        <!-- Row 3: Numbers 4-6 and minus -->
+        <Button Grid.Row="4" Grid.Column="0"
+                BackgroundColor="White"
+                FontSize="28"
+                FontAttributes="Bold"
+                Text="4"
+                TextColor="#1F2937"
+                CornerRadius="35"
+                Clicked="NumberSelect"
+                HeightRequest="70"
+                WidthRequest="70"
+                BorderColor="#F3F4F6"
+                BorderWidth="1" />
+
+        <Button Grid.Row="4" Grid.Column="1"
+                BackgroundColor="White"
+                FontSize="28"
+                FontAttributes="Bold"
+                Text="5"
+                TextColor="#1F2937"
+                CornerRadius="35"
+                Clicked="NumberSelect"
+                HeightRequest="70"
+                WidthRequest="70"
+                BorderColor="#F3F4F6"
+                BorderWidth="1" />
+
+        <Button Grid.Row="4" Grid.Column="2"
+                BackgroundColor="White"
+                FontSize="28"
+                FontAttributes="Bold"
+                Text="6"
+                TextColor="#1F2937"
+                CornerRadius="35"
+                Clicked="NumberSelect"
+                HeightRequest="70"
+                WidthRequest="70"
+                BorderColor="#F3F4F6"
+                BorderWidth="1" />
+
+        <Button Grid.Row="4" Grid.Column="3"
+                BackgroundColor="#DBEAFE"
+                FontSize="24"
+                FontAttributes="Bold"
+                Text="−"
+                TextColor="#1E40AF"
+                CornerRadius="35"
+                Clicked="OperatorSelect"
+                HeightRequest="70"
+                WidthRequest="70"
+                BorderWidth="0" />
+
+        <!-- Row 4: Numbers 1-3 and plus -->
+        <Button Grid.Row="5" Grid.Column="0"
+                BackgroundColor="White"
+                FontSize="28"
+                FontAttributes="Bold"
+                Text="1"
+                TextColor="#1F2937"
+                CornerRadius="35"
+                Clicked="NumberSelect"
+                HeightRequest="70"
+                WidthRequest="70"
+                BorderColor="#F3F4F6"
+                BorderWidth="1" />
+
+        <Button Grid.Row="5" Grid.Column="1"
+                BackgroundColor="White"
+                FontSize="28"
+                FontAttributes="Bold"
+                Text="2"
+                TextColor="#1F2937"
+                CornerRadius="35"
+                Clicked="NumberSelect"
+                HeightRequest="70"
+                WidthRequest="70"
+                BorderColor="#F3F4F6"
+                BorderWidth="1" />
+
+        <Button Grid.Row="5" Grid.Column="2"
+                BackgroundColor="White"
+                FontSize="28"
+                FontAttributes="Bold"
+                Text="3"
+                TextColor="#1F2937"
+                CornerRadius="35"
+                Clicked="NumberSelect"
+                HeightRequest="70"
+                WidthRequest="70"
+                BorderColor="#F3F4F6"
+                BorderWidth="1" />
+
+        <Button Grid.Row="5" Grid.Column="3"
+                BackgroundColor="#DBEAFE"
+                FontSize="24"
+                FontAttributes="Bold"
+                Text="+"
+                TextColor="#1E40AF"
+                CornerRadius="35"
+                Clicked="OperatorSelect"
+                HeightRequest="70"
+                WidthRequest="70"
+                BorderWidth="0" />
+
+        <!-- Row 5: Zero (smaller), decimal point, delete, and equals -->
+        <Button Grid.Row="6" Grid.Column="0"
+                BackgroundColor="White"
+                FontSize="28"
+                FontAttributes="Bold"
+                Text="0"
+                TextColor="#1F2937"
+                CornerRadius="35"
+                Clicked="NumberSelect"
+                HeightRequest="70"
+                WidthRequest="70"
+                BorderColor="#F3F4F6"
+                BorderWidth="1" />
+
+        <Button Grid.Row="6" Grid.Column="1"
+                BackgroundColor="White"
+                FontSize="28"
+                FontAttributes="Bold"
+                Text="."
+                TextColor="#1F2937"
+                CornerRadius="35"
+                Clicked="NumberSelect"
+                HeightRequest="70"
+                WidthRequest="70"
+                BorderColor="#F3F4F6"
+                BorderWidth="1" />
+
+        <Button Grid.Row="6" Grid.Column="2"
+                BackgroundColor="#FEE2E2"
+                FontSize="20"
+                FontAttributes="Bold"
+                Text="⌫"
+                TextColor="#DC2626"
+                CornerRadius="35"
+                Clicked="Delete"
+                HeightRequest="70"
+                WidthRequest="70"
+                BorderWidth="0" />
+
+        <Button Grid.Row="6" Grid.Column="3"
+                BackgroundColor="#DBEAFE"
+                FontSize="24"
+                FontAttributes="Bold"
+                Text="="
+                TextColor="#1E40AF"
+                CornerRadius="35"
+                Clicked="Calculate"
+                HeightRequest="70"
+                WidthRequest="70"
+                BorderWidth="0" />
+
+    </Grid>
+
+</ContentPage>
